@@ -35,13 +35,13 @@ public class Main extends Application {
 
     public static Properties properties = new Properties();
 
-    public void initProperties() throws IOException{
+    public static void initProperties() throws IOException{
         URL url = null;
         File file = new File("liste.properties");
         if(file.isFile())
             properties.load(new FileInputStream(file));
         else{
-            url = this.getClass().getResource("/liste.properties");
+            url = Main.class.getResource("/liste.properties");
             if(url != null && url.getFile() != null) {
                 properties.load(new InputStreamReader((url.openStream()),"UTF-8"));
             }

@@ -1,26 +1,44 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 
 <GridPane alignment="center" hgap="10" maxHeight="Infinity" maxWidth="Infinity" prefHeight="493.0" prefWidth="706.0" vgap="10" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="net.arkaine.Controller">
 
    <children>
-      <ComboBox GridPane.hgrow="always" GridPane.vgrow="always"  id="listsCoins" fx:id="listsCoins" prefHeight="26.0" prefWidth="279.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+      <ComboBox id="listsCoins" fx:id="listsCoins" prefHeight="26.0" prefWidth="279.0" GridPane.columnIndex="1" GridPane.hgrow="always" GridPane.rowIndex="1" GridPane.vgrow="always" />
       <Label text="Price coin" GridPane.rowIndex="2" />
-      <Label GridPane.hgrow="always" GridPane.vgrow="always" id="priceCoin" fx:id="priceCoin" text="Price" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+      <Label id="priceCoin" fx:id="priceCoin" text="Price" GridPane.columnIndex="1" GridPane.hgrow="always" GridPane.rowIndex="2" GridPane.vgrow="always" />
       <Label text="Coin" GridPane.rowIndex="1" />
-      <Button mnemonicParsing="false" text="Button" GridPane.columnIndex="1" />
-      <Button id="deleteBtn" fx:id="deleteBtn" mnemonicParsing="false" text="delete all" GridPane.columnIndex="1" />
-      <Button id="saveBtn" fx:id="saveBtn" mnemonicParsing="false" text="save selection" />
-      <TabPane GridPane.hgrow="always" GridPane.vgrow="always" id="tabSelectedCoins" fx:id="tabSelectedCoins" prefHeight="363.0" prefWidth="655.0" tabClosingPolicy="UNAVAILABLE" GridPane.columnSpan="2" GridPane.rowIndex="3">
+      <TabPane id="tabSelectedCoins" fx:id="tabSelectedCoins"
+               prefHeight="363.0" prefWidth="655.0"
+               tabClosingPolicy="UNAVAILABLE" GridPane.columnSpan="2" GridPane.hgrow="always" GridPane.rowIndex="3" GridPane.vgrow="always">
         <tabs>
         </tabs>
       </TabPane>
+      <HBox prefHeight="100.0" prefWidth="200.0" GridPane.columnSpan="2" GridPane.hgrow="always" GridPane.vgrow="always"  GridPane.columnIndex="0">
+         <children>
+            <CheckBox id="showEuro" fx:id="showEuro" mnemonicParsing="true" text="show Euro" />
+            <Button id="deleteBtn" fx:id="deleteBtn" mnemonicParsing="false" text="delete all" />
+            <Button id="saveBtn" fx:id="saveBtn" mnemonicParsing="false" text="save selection" />
+         </children>
+      </HBox>
    </children>
+   <columnConstraints>
+      <ColumnConstraints />
+      <ColumnConstraints />
+   </columnConstraints>
+   <rowConstraints>
+      <RowConstraints />
+      <RowConstraints />
+      <RowConstraints />
+      <RowConstraints />
+   </rowConstraints>
 </GridPane>
