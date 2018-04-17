@@ -6,12 +6,13 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.URL;
 import java.net.URLConnection;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.Properties;
+
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -24,13 +25,28 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception{
 
+        initProperties();
         FXMLLoader fxmlLoader = new FXMLLoader();
         Parent root = fxmlLoader.load(getClass().getResource("/sample.fxml"));
         primaryStage.setTitle("Courts crypto");
-        primaryStage.setScene(new Scene(root, 300, 275));
+        primaryStage.setScene(new Scene(root, 800, 600));
         primaryStage.show();
     }
 
+    public static Properties properties = new Properties();
+
+    public void initProperties() throws IOException{
+        URL url = null;
+        File file = new File("liste.properties");
+        if(file.isFile())
+            properties.load(new FileInputStream(file));
+        else{
+            url = this.getClass().getResource("/liste.properties");
+            if(url != null && url.getFile() != null) {
+                properties.load(new InputStreamReader((url.openStream()),"UTF-8"));
+            }
+        }
+    }
 
     public static JSONObject getJson(String urlApi){
         JSONParser parser = new JSONParser();
