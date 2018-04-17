@@ -155,7 +155,7 @@ public class Controller implements Initializable {
                     result.append(json.get(key) + " $ ");
                 if( key.equals("EUR") && showEuro.isSelected())
                     result.append(json.get(key) + " E ");
-                if( key.equals("EUR") && showBTC.isSelected())
+                if( key.equals("BTC") && showBTC.isSelected())
                     result.append(json.get(key) + " B ");
             }
         }
