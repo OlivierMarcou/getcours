@@ -5,13 +5,17 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.layout.HBox;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import javafx.scene.web.WebEngine;
+import javafx.scene.web.WebView;
 import org.json.simple.JSONObject;
 
 import java.io.IOException;
@@ -118,10 +122,19 @@ public class Controller implements Initializable {
     private Tab addTab(String money) {
         if(!money.trim().isEmpty()) {
             Tab tab = new Tab(money + " " + addPrice(money));
-            HBox hbox = new HBox();
-            hbox.getChildren().add(new Label(money));
-            hbox.setAlignment(Pos.CENTER);
-            tab.setContent(hbox);
+
+            WebView browser = new WebView();
+            WebEngine webEngine = browser.getEngine();
+            String url = "https://www.cryptocompare.com/coins/"+money.toLowerCase()+"/overview//USD";
+            tab.setOnSelectionChanged(new EventHandler<Event>() {
+                @Override
+                public void handle(Event event) {
+                    System.out.println("Changed");
+                    if(tab.isSelected())
+                        webEngine.load(url);
+                }
+            });
+            tab.setContent(browser);
             tabSelectedCoins.getTabs().add(tab);
             return tab;
         }
@@ -155,6 +168,8 @@ public class Controller implements Initializable {
                     result.append(json.get(key) + " $ ");
                 if( key.equals("EUR") && showEuro.isSelected())
                     result.append(json.get(key) + " E ");
+                if( key.equals("BTC") && showBTC.isSelected())
+                    result.append(json.get(key) + " B ");
                 if( key.equals("BTC") && showBTC.isSelected())
                     result.append(json.get(key) + " B ");
             }
