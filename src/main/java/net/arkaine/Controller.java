@@ -118,14 +118,14 @@ public class Controller implements Initializable {
             }
         });
     }
-
+    private boolean isNotRefresh = true;
     private Tab addTab(String money) {
         if(!money.trim().isEmpty()) {
             Tab tab = new Tab(money + " " + addPrice(money));
 
             WebView browser = new WebView();
             WebEngine webEngine = browser.getEngine();
-            String url = "https://www.cryptocompare.com/coins/"+money.toLowerCase()+"/overview//USD";
+            String url = "https://www.cryptocompare.com/coins/"+money.toLowerCase()+"/overview/USD";
             tab.setOnSelectionChanged(new EventHandler<Event>() {
                 @Override
                 public void handle(Event event) {
@@ -142,6 +142,7 @@ public class Controller implements Initializable {
     }
 
     private void refreshTab() {
+        isNotRefresh = false;
         try {
             Main.initProperties();
         } catch (IOException e) {
