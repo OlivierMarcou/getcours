@@ -23,6 +23,8 @@ import java.util.*;
 
 public class Controller implements Initializable {
     @FXML private CheckBox showEuro;
+    @FXML private CheckBox showDollar;
+    @FXML private CheckBox showBTC;
     @FXML private ComboBox listsCoins;
     @FXML private TabPane tabSelectedCoins;
     @FXML private Label priceCoin;
@@ -55,6 +57,22 @@ public class Controller implements Initializable {
             public void handle(ActionEvent event) {
 
                 System.out.println(showEuro.isSelected());
+                refreshTab();
+            }
+        });
+        showDollar.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+
+                System.out.println(showDollar.isSelected());
+                refreshTab();
+            }
+        });
+        showBTC.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+
+                System.out.println(showBTC.isSelected());
                 refreshTab();
             }
         });
@@ -133,10 +151,12 @@ public class Controller implements Initializable {
         for(Object key:json.keySet()){
             if(key.getClass().equals(String.class) && key != null)
             {
-                if( key.equals("USD"))
+                if( key.equals("USD") && showDollar.isSelected())
                     result.append(json.get(key) + " $ ");
                 if( key.equals("EUR") && showEuro.isSelected())
                     result.append(json.get(key) + " E ");
+                if( key.equals("EUR") && showBTC.isSelected())
+                    result.append(json.get(key) + " B ");
             }
         }
         return result.toString();
