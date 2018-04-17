@@ -129,7 +129,6 @@ public class Controller implements Initializable {
             tab.setOnSelectionChanged(new EventHandler<Event>() {
                 @Override
                 public void handle(Event event) {
-                    System.out.println("Changed");
                     if(tab.isSelected())
                         webEngine.load(url);
                 }
