@@ -8,6 +8,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyCode;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import org.json.simple.JSONObject;
@@ -31,6 +32,7 @@ public class Controller implements Initializable {
     @FXML private Button saveBtn;
     @FXML private TextField autoCompletion;
 
+    ArrayList<String> activeCoins = new ArrayList<>();
     private HashMap<String, Tab> savedMoney = new HashMap<>();
     
     public void setScene(Scene scene) {
@@ -41,17 +43,13 @@ public class Controller implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        Main.json.keySet().forEach(name -> activeCoins.add((String) name));
         for(String money: Main.properties.getProperty("listMonnaies").split(","))
             savedMoney.put(money, addTab(money));
-        ArrayList<String> listCoins = new ArrayList<>();
-        for(Object name:Main.json.keySet()){
-            if(name.getClass().equals(String.class)){
-                listCoins.add((String) name);
-            }
-        }
-        Collections.sort(listCoins);
+
+        Collections.sort(activeCoins);
         ObservableList<String> options =
-                FXCollections.observableArrayList(listCoins);
+                FXCollections.observableArrayList(activeCoins);
         listsCoins.getItems().clear();
         listsCoins.setItems(options);
 
@@ -59,14 +57,17 @@ public class Controller implements Initializable {
             priceCoin.setText(Controller.this.addPrice((String)coinName));
         });
         autoCompletion.setOnKeyReleased(ke -> {
-                    System.out.println("key"+ke);
+            System.out.println("setOnKeyReleased : " + ke.getCode() );
             Optional<String> result = listsCoins.getItems().stream().filter(name -> autoCompletion.getText()!= null
                     && !autoCompletion.getText().trim().isEmpty()
                     && ((String)name).toLowerCase().startsWith(autoCompletion.getText().toLowerCase())).findFirst();
             result.ifPresent(s ->{
                     listsCoins.getSelectionModel().select(s);
                     priceCoin.setText(addPrice(s));
-                    System.out.println("listsCoins.setValue("+s+")"); });
+                    if(ke.getCode().equals(KeyCode.ENTER)){
+                        addTab(s);
+                    }
+            });
         });
         showEuro.setOnAction(eventEuro -> {refreshTab();});
         showDollar.setOnAction(eventDollar -> {refreshTab();});
@@ -74,32 +75,44 @@ public class Controller implements Initializable {
         deleteBtn.setOnAction( eventDelete -> {
                 savedMoney.clear();
                 tabSelectedCoins.getTabs().clear();
-                try {
-                    Files.delete(Paths.get("liste.properties"));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                save();
         });
         saveBtn.setOnAction(eventSave-> {
                 String money = (String) listsCoins.getSelectionModel().getSelectedItem();
-                if(money != null && !money.isEmpty() && !savedMoney.containsKey(money)) {
+                if(money != null && !money.isEmpty() && !savedMoney.containsKey(money) && activeCoins.contains(money)) {
                     savedMoney.put(money, addTab(money));
-                    try {
-                        String content =  ("listMonnaies=");
-                        for(String token: savedMoney.keySet())
-                            content += token+",";
-                        Files.write(Paths.get("liste.properties"), content.getBytes(), StandardOpenOption.CREATE);
-                    }catch (IOException e) {
-                        e.printStackTrace();
-                    }
                 }
+                save();
             });
+        tabSelectedCoins.setTabClosingPolicy(TabPane.TabClosingPolicy.ALL_TABS);
+    }
+
+    protected void save(){
+        System.out.println("Saving ...");
+        try {
+            String content =  ("listMonnaies=");
+            for(String token: savedMoney.keySet()){
+                System.out.println("Save :" + token);
+                if(token != null && !token.trim().isEmpty() && activeCoins.contains(token))
+                    content += token+",";
+            }
+            Files.write(Paths.get("liste.properties"), content.getBytes(), StandardOpenOption.CREATE);
+        }catch (IOException e) {
+            e.printStackTrace();
+        }
     }
     private boolean isNotRefresh = true;
-    private Tab addTab(String money) {
-        if(!money.trim().isEmpty()) {
-            Tab tab = new Tab(money + " " + addPrice(money));
 
+    private Tab addTab(String money) {
+        System.out.println("Add Tab"+ money);
+        if(!money.trim().isEmpty() && activeCoins.contains(money) && !savedMoney.containsKey(money)) {
+            Tab tab = new Tab(money + " " + addPrice(money));
+            tab.setOnClosed((eventTab)->{
+                tabSelectedCoins.getTabs().remove(this);
+                System.out.println("remove " + money);
+                savedMoney.remove(money);
+                save();
+            });
             WebView browser = new WebView();
             WebEngine webEngine = browser.getEngine();
             String url = "https://www.cryptocompare.com/coins/"+money.toLowerCase()+"/overview/USD";
@@ -112,12 +125,14 @@ public class Controller implements Initializable {
             });
             tab.setContent(browser);
             tabSelectedCoins.getTabs().add(tab);
+            savedMoney.put(money,tab);
             return tab;
         }
         return null;
     }
 
     private void refreshTab() {
+        System.out.println("refresh Tab");
         isNotRefresh = false;
         try {
             Main.initProperties();
@@ -128,13 +143,15 @@ public class Controller implements Initializable {
         savedMoney = new HashMap<>();
         tabSelectedCoins.getTabs().clear();
         for(String money: Main.properties.getProperty("listMonnaies").split(","))
-            savedMoney.put(money, addTab(money));
+            if(activeCoins.contains(money))
+                savedMoney.put(money, addTab(money));
     }
 
 
     public static final String urlApiPrice = "https://min-api.cryptocompare.com/data/price?tsyms=BTC,USD,EUR&fsym=";
 
     protected String addPrice(String coinName){
+        System.out.println("addPrice" + coinName);
         JSONObject json = Main.getJson(urlApiPrice+coinName);
         StringBuilder result = new StringBuilder();
         Consumer<String> consumerCoins = key -> {
