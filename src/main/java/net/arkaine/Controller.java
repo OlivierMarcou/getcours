@@ -1,19 +1,13 @@
 package net.arkaine;
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import org.json.simple.JSONObject;
@@ -24,6 +18,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.*;
+import java.util.function.Consumer;
 
 public class Controller implements Initializable {
     @FXML private CheckBox showEuro;
@@ -34,6 +29,8 @@ public class Controller implements Initializable {
     @FXML private Label priceCoin;
     @FXML private Button deleteBtn;
     @FXML private Button saveBtn;
+    @FXML private TextField autoCompletion;
+
     private HashMap<String, Tab> savedMoney = new HashMap<>();
     
     public void setScene(Scene scene) {
@@ -55,34 +52,26 @@ public class Controller implements Initializable {
         Collections.sort(listCoins);
         ObservableList<String> options =
                 FXCollections.observableArrayList(listCoins);
+        listsCoins.getItems().clear();
+        listsCoins.setItems(options);
 
-        showEuro.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-
-                System.out.println(showEuro.isSelected());
-                refreshTab();
-            }
+        listsCoins.valueProperty().addListener(( ov,  coinNameOld,  coinName) ->{
+            priceCoin.setText(Controller.this.addPrice((String)coinName));
         });
-        showDollar.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-
-                System.out.println(showDollar.isSelected());
-                refreshTab();
-            }
+        autoCompletion.setOnKeyReleased(ke -> {
+                    System.out.println("key"+ke);
+            Optional<String> result = listsCoins.getItems().stream().filter(name -> autoCompletion.getText()!= null
+                    && !autoCompletion.getText().trim().isEmpty()
+                    && ((String)name).toLowerCase().startsWith(autoCompletion.getText().toLowerCase())).findFirst();
+            result.ifPresent(s ->{
+                    listsCoins.getSelectionModel().select(s);
+                    priceCoin.setText(addPrice(s));
+                    System.out.println("listsCoins.setValue("+s+")"); });
         });
-        showBTC.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-
-                System.out.println(showBTC.isSelected());
-                refreshTab();
-            }
-        });
-        deleteBtn.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
+        showEuro.setOnAction(eventEuro -> {refreshTab();});
+        showDollar.setOnAction(eventDollar -> {refreshTab();});
+        showBTC.setOnAction(eventBTC ->{refreshTab();});
+        deleteBtn.setOnAction( eventDelete -> {
                 savedMoney.clear();
                 tabSelectedCoins.getTabs().clear();
                 try {
@@ -90,11 +79,8 @@ public class Controller implements Initializable {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-            }
         });
-        saveBtn.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(javafx.event.ActionEvent event) {
+        saveBtn.setOnAction(eventSave-> {
                 String money = (String) listsCoins.getSelectionModel().getSelectedItem();
                 if(money != null && !money.isEmpty() && !savedMoney.containsKey(money)) {
                     savedMoney.put(money, addTab(money));
@@ -107,16 +93,7 @@ public class Controller implements Initializable {
                         e.printStackTrace();
                     }
                 }
-            }
-
-        });
-        listsCoins.getItems().clear();
-        listsCoins.setItems(options);
-        listsCoins.valueProperty().addListener(new ChangeListener<String>() {
-            @Override public void changed(ObservableValue ov, String coinNameOld, String coinName) {
-                priceCoin.setText(Controller.this.addPrice(coinName));
-            }
-        });
+            });
     }
     private boolean isNotRefresh = true;
     private Tab addTab(String money) {
@@ -159,9 +136,8 @@ public class Controller implements Initializable {
 
     protected String addPrice(String coinName){
         JSONObject json = Main.getJson(urlApiPrice+coinName);
-
         StringBuilder result = new StringBuilder();
-        for(Object key:json.keySet()){
+        Consumer<String> consumerCoins = key -> {
             if(key.getClass().equals(String.class) && key != null)
             {
                 if( key.equals("USD") && showDollar.isSelected())
@@ -170,10 +146,8 @@ public class Controller implements Initializable {
                     result.append(json.get(key) + " E ");
                 if( key.equals("BTC") && showBTC.isSelected())
                     result.append(json.get(key) + " B ");
-                if( key.equals("BTC") && showBTC.isSelected())
-                    result.append(json.get(key) + " B ");
-            }
-        }
+            }};
+        json.keySet().forEach(consumerCoins);
         return result.toString();
     }
 }
