@@ -1,5 +1,6 @@
 package net.arkaine;
 
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.Event;
@@ -11,6 +12,7 @@ import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
+import javafx.stage.Stage;
 import org.json.simple.JSONObject;
 
 import java.io.IOException;
@@ -31,6 +33,7 @@ public class Controller implements Initializable {
     @FXML private Button deleteBtn;
     @FXML private Button saveBtn;
     @FXML private TextField autoCompletion;
+    @FXML private Button priceCoinRefresh;
 
     ArrayList<String> activeCoins = new ArrayList<>();
     private HashMap<String, Tab> savedMoney = new HashMap<>();
@@ -83,6 +86,12 @@ public class Controller implements Initializable {
                     savedMoney.put(money, addTab(money));
                 }
                 save();
+            });
+        priceCoinRefresh.setOnAction(eventRefreshCoin-> {
+                String money = (String) listsCoins.getSelectionModel().getSelectedItem();
+                if(money != null && !money.isEmpty()) {
+                    priceCoin.setText(addPrice(money));
+                }
             });
         tabSelectedCoins.setTabClosingPolicy(TabPane.TabClosingPolicy.ALL_TABS);
     }
@@ -151,7 +160,7 @@ public class Controller implements Initializable {
     public static final String urlApiPrice = "https://min-api.cryptocompare.com/data/price?tsyms=BTC,USD,EUR&fsym=";
 
     protected String addPrice(String coinName){
-        System.out.println("addPrice" + coinName);
+       // System.out.println("addPrice" + coinName);
         JSONObject json = Main.getJson(urlApiPrice+coinName);
         StringBuilder result = new StringBuilder();
         Consumer<String> consumerCoins = key -> {

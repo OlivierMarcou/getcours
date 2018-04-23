@@ -22,14 +22,14 @@ public class Main extends Application {
     private static String urlApiAllCoins ="https://min-api.cryptocompare.com/data/all/coinlist";
     public static JSONObject json = getJson(urlApiAllCoins);
 
+
     @Override
     public void start(Stage primaryStage) throws Exception{
-
         initProperties();
         FXMLLoader fxmlLoader = new FXMLLoader();
         Parent root = fxmlLoader.load(getClass().getResource("/sample.fxml"));
-        primaryStage.setTitle("Courts crypto");
-        primaryStage.setScene(new Scene(root, 800, 600));
+        primaryStage.setTitle("Cours crypto");
+        primaryStage.setScene(new Scene(root));
         primaryStage.show();
     }
 
