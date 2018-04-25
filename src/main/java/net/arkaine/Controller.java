@@ -115,13 +115,14 @@ public class Controller implements Initializable {
     private Tab addTab(String money) {
         System.out.println("Add Tab"+ money);
         if(!money.trim().isEmpty() && activeCoins.contains(money) && !savedMoney.containsKey(money)) {
-            Tab tab = new Tab(money + " " + addPrice(money));
+            TabAutoRefresh tab = new TabAutoRefresh(money, this);
             tab.setOnClosed((eventTab)->{
                 tabSelectedCoins.getTabs().remove(this);
                 System.out.println("remove " + money);
                 savedMoney.remove(money);
                 save();
             });
+
             WebView browser = new WebView();
             WebEngine webEngine = browser.getEngine();
             String url = "https://www.cryptocompare.com/coins/"+money.toLowerCase()+"/overview/USD";
