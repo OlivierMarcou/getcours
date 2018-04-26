@@ -127,7 +127,8 @@ public class Controller implements Initializable {
                 }
             }
                 System.out.println("Save ALL :" + content);
-            Files.delete(Paths.get("liste.properties"));
+            if(Files.exists(Paths.get("liste.properties")))
+                Files.delete(Paths.get("liste.properties"));
             Files.write(Paths.get("liste.properties"), content.getBytes(), StandardOpenOption.CREATE);
         }catch (IOException e) {
             e.printStackTrace();
