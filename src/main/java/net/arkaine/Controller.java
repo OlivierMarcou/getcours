@@ -107,7 +107,7 @@ public class Controller implements Initializable {
                     priceCoin.setText(addPrice(money, true));
                 }
             });
-
+        showWeb.setOnMouseClicked(e->{refreshTab();});
         tabSelectedCoins.setTabClosingPolicy(TabPane.TabClosingPolicy.ALL_TABS);
     }
 
@@ -127,6 +127,7 @@ public class Controller implements Initializable {
                 }
             }
                 System.out.println("Save ALL :" + content);
+            Files.delete(Paths.get("liste.properties"));
             Files.write(Paths.get("liste.properties"), content.getBytes(), StandardOpenOption.CREATE);
         }catch (IOException e) {
             e.printStackTrace();
