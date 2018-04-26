@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<GridPane alignment="center" hgap="10" maxHeight="Infinity" maxWidth="Infinity" minHeight="600.0"  minWidth="800.0" prefHeight="1035.0" prefWidth="1129.0" vgap="10" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="net.arkaine.Controller">
+<GridPane alignment="center" hgap="10" maxHeight="Infinity" maxWidth="Infinity" minHeight="600.0" minWidth="800.0" prefHeight="1035.0" prefWidth="1129.0" vgap="10" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="net.arkaine.Controller">
 
    <children>
       <HBox minWidth="800.0" prefHeight="40.0" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.hgrow="always" GridPane.rowIndex="1">
@@ -41,7 +41,7 @@
                <CheckBox id="showDollar" fx:id="showDollar" mnemonicParsing="false" selected="true" text="show Dollar" />
                <CheckBox id="showBTC" fx:id="showBTC" contentDisplay="CENTER" mnemonicParsing="false" text="show BTC" />
                <CheckBox id="showEuro" fx:id="showEuro" contentDisplay="RIGHT" mnemonicParsing="false" text="show Euro" />
-            <CheckBox  id="showWeb" fx:id="showWeb" mnemonicParsing="false" text="Affichage Web Actif" selected="true" />
+            <CheckBox id="showWeb" fx:id="showWeb" mnemonicParsing="false" selected="true" text="Affichage Web Actif" />
            </children>
        </HBox>
        

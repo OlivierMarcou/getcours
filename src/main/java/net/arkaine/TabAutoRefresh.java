@@ -4,6 +4,8 @@ import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.scene.control.Tab;
 
+import javafx.scene.text.Text;
+
 public class TabAutoRefresh extends Tab{
 
     public TabAutoRefresh(String money, Controller parent){
@@ -16,7 +18,7 @@ public class TabAutoRefresh extends Tab{
                 int i;
                 while(true) {
                     try {
-                        Thread.sleep(2000);
+                        Thread.sleep(5000);
                     } catch (InterruptedException ie) {
                     }
 
@@ -25,7 +27,13 @@ public class TabAutoRefresh extends Tab{
 
                         @Override
                         public void run() {
-                            TabAutoRefresh.this.setText(money + " \n" + parent.addPrice(money));
+                            String prices = parent.addPrice(money);
+                            if(!prices.trim().isEmpty()) {
+                                TabAutoRefresh.this.setStyle("-fx-text-base-color: black;");
+                                TabAutoRefresh.this.setText(money + " \n" + prices);
+                            }
+                            else
+                                TabAutoRefresh.this.setStyle("-fx-text-base-color: red;");
                         }
                     });
 

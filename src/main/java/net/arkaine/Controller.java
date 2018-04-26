@@ -60,7 +60,7 @@ public class Controller implements Initializable {
         listsCoins.setItems(options);
 
         listsCoins.valueProperty().addListener(( ov,  coinNameOld,  coinName) ->{
-            priceCoin.setText(Controller.this.addPrice((String)coinName));
+            priceCoin.setText(Controller.this.addPrice((String)coinName, true));
         });
         autoCompletion.setOnKeyReleased(ke -> {
             System.out.println("setOnKeyReleased : " + ke.getCode() );
