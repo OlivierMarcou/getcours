@@ -10,7 +10,6 @@ public class TabAutoRefresh extends Tab{
         super(money + " \n" + parent.addPrice(money));
         setStyle(
                 "-fx-font-weight: bold;");
-
         Task<Integer> task = new Task<Integer>() {
             @Override
             protected Integer call() throws Exception {

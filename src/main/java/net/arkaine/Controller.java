@@ -27,6 +27,7 @@ public class Controller implements Initializable {
     @FXML private CheckBox showEuro;
     @FXML private CheckBox showDollar;
     @FXML private CheckBox showBTC;
+    @FXML private CheckBox showWeb;
     @FXML private ComboBox listsCoins;
     @FXML private TabPane tabSelectedCoins;
     @FXML private Label priceCoin;
@@ -106,6 +107,7 @@ public class Controller implements Initializable {
                     priceCoin.setText(addPrice(money, true));
                 }
             });
+
         tabSelectedCoins.setTabClosingPolicy(TabPane.TabClosingPolicy.ALL_TABS);
     }
 
@@ -149,7 +151,7 @@ public class Controller implements Initializable {
             tab.setOnSelectionChanged(new EventHandler<Event>() {
                 @Override
                 public void handle(Event event) {
-                    if(tab.isSelected())
+                    if(tab.isSelected() && showWeb.isSelected())
                         webEngine.load(url);
                 }
             });

@@ -34,13 +34,14 @@
                <Button id="priceCoinRefresh" fx:id="priceCoinRefresh" mnemonicParsing="false" text="Refresh" />
            </children>
        </HBox>
-       <HBox minWidth="800.0" prefHeight="40.0" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.hgrow="always" GridPane.rowIndex="3">
+       <HBox minWidth="800.0" prefHeight="40.0" style="-fx-spacing: 25;" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.hgrow="always" GridPane.rowIndex="3">
            <children>
                <Button id="saveBtn" fx:id="saveBtn" mnemonicParsing="false" text="save selection" />
                <Button id="deleteBtn" fx:id="deleteBtn" mnemonicParsing="false" text="delete all" />
                <CheckBox id="showDollar" fx:id="showDollar" mnemonicParsing="false" selected="true" text="show Dollar" />
                <CheckBox id="showBTC" fx:id="showBTC" contentDisplay="CENTER" mnemonicParsing="false" text="show BTC" />
                <CheckBox id="showEuro" fx:id="showEuro" contentDisplay="RIGHT" mnemonicParsing="false" text="show Euro" />
+            <CheckBox  id="showWeb" fx:id="showWeb" mnemonicParsing="false" text="Affichage Web Actif" selected="true" />
            </children>
        </HBox>
        
