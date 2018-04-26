@@ -29,7 +29,9 @@ public class Main extends Application {
         FXMLLoader fxmlLoader = new FXMLLoader();
         Parent root = fxmlLoader.load(getClass().getResource("/sample.fxml"));
         primaryStage.setTitle("Cours crypto");
-        primaryStage.setScene(new Scene(root));
+        Scene scene = new Scene(root);
+        primaryStage.setScene(scene);
+        primaryStage.setMinHeight(600.0);primaryStage.setMinWidth(800.0);
         primaryStage.show();
     }
 
