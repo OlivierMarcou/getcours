@@ -74,6 +74,15 @@ public class Controller implements Initializable {
                     }
             });
         });
+        volumeCoin.textProperty().addListener(
+              ( observable,  oldValue,
+                                 newValue) -> {
+                if (!newValue.matches("\\d*")) {
+                    volumeCoin.setText(newValue.replaceAll("[^\\d]", ""));
+                }else{
+                    valeur.setText(String.valueOf(Double.parseDouble(volumeCoin.getText())*dollarValue)+" $");
+                }
+            });
         showEuro.setOnAction(eventEuro -> {refreshTab();});
         showDollar.setOnAction(eventDollar -> {refreshTab();});
         showBTC.setOnAction(eventBTC ->{refreshTab();});
@@ -160,6 +169,7 @@ public class Controller implements Initializable {
     }
 
     public static final String urlApiPrice = "https://min-api.cryptocompare.com/data/price?tsyms=BTC,USD,EUR&fsym=";
+    private double dollarValue = 0 ;
 
     protected String addPrice(String coinName){
         return addPrice(coinName, false);
@@ -173,7 +183,7 @@ public class Controller implements Initializable {
             {
                 if( key.equals("USD") && showDollar.isSelected()){
                     if(isPriceCoin){
-                        double dollarValue = (double)json.get(key);
+                        dollarValue = (double)json.get(key);
                         valeur.setText(String.valueOf(Double.parseDouble(volumeCoin.getText())*dollarValue)+" $");
                     }
                     result.append(json.get(key) + " $ ");                }
