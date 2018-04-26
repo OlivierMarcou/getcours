@@ -5,6 +5,7 @@
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
@@ -22,10 +23,12 @@
          </children>
       </HBox>
 
-       <HBox minWidth="800.0" prefHeight="40.0" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.hgrow="always" GridPane.rowIndex="2">
+       <HBox minWidth="800.0" prefHeight="40.0" style="-fx-spacing: 50;" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.hgrow="always" GridPane.rowIndex="2">
            <children>
                <Label text="Price coin" />
                <Label id="priceCoin" fx:id="priceCoin" text="Price" />
+            <TextArea id="volumeCoin" fx:id="volumeCoin" maxHeight="30.0" minHeight="30.0" prefHeight="30.0" prefWidth="200.0" promptText="Volume monnaie" text="0" />
+            <Label id="valeur" fx:id="valeur" text="Label" />
                <Button id="priceCoinRefresh" fx:id="priceCoinRefresh" mnemonicParsing="false" text="Refresh" />
            </children>
        </HBox>

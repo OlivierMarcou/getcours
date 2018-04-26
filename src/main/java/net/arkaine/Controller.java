@@ -34,6 +34,8 @@ public class Controller implements Initializable {
     @FXML private Button saveBtn;
     @FXML private TextField autoCompletion;
     @FXML private Button priceCoinRefresh;
+    @FXML private  TextArea volumeCoin;
+    @FXML private Label valeur;
 
     ArrayList<String> activeCoins = new ArrayList<>();
     private HashMap<String, Tab> savedMoney = new HashMap<>();
@@ -57,7 +59,7 @@ public class Controller implements Initializable {
         listsCoins.setItems(options);
 
         listsCoins.valueProperty().addListener(( ov,  coinNameOld,  coinName) ->{
-            priceCoin.setText(Controller.this.addPrice((String)coinName));
+            priceCoin.setText(Controller.this.addPrice((String)coinName, true));
         });
         autoCompletion.setOnKeyReleased(ke -> {
             System.out.println("setOnKeyReleased : " + ke.getCode() );
@@ -66,7 +68,7 @@ public class Controller implements Initializable {
                     && ((String)name).toLowerCase().startsWith(autoCompletion.getText().toLowerCase())).findFirst();
             result.ifPresent(s ->{
                     listsCoins.getSelectionModel().select(s);
-                    priceCoin.setText(addPrice(s));
+                    priceCoin.setText(addPrice(s, true));
                     if(ke.getCode().equals(KeyCode.ENTER)){
                         addTab(s);
                     }
@@ -90,7 +92,7 @@ public class Controller implements Initializable {
         priceCoinRefresh.setOnAction(eventRefreshCoin-> {
                 String money = (String) listsCoins.getSelectionModel().getSelectedItem();
                 if(money != null && !money.isEmpty()) {
-                    priceCoin.setText(addPrice(money));
+                    priceCoin.setText(addPrice(money, true));
                 }
             });
         tabSelectedCoins.setTabClosingPolicy(TabPane.TabClosingPolicy.ALL_TABS);
@@ -157,18 +159,24 @@ public class Controller implements Initializable {
                 savedMoney.put(money, addTab(money));
     }
 
-
     public static final String urlApiPrice = "https://min-api.cryptocompare.com/data/price?tsyms=BTC,USD,EUR&fsym=";
 
     protected String addPrice(String coinName){
+        return addPrice(coinName, false);
+    }
+    protected String addPrice(String coinName, boolean isPriceCoin){
        // System.out.println("addPrice" + coinName);
         JSONObject json = Main.getJson(urlApiPrice+coinName);
         StringBuilder result = new StringBuilder();
         Consumer<String> consumerCoins = key -> {
             if(key.getClass().equals(String.class) && key != null)
             {
-                if( key.equals("USD") && showDollar.isSelected())
-                    result.append(json.get(key) + " $ ");
+                if( key.equals("USD") && showDollar.isSelected()){
+                    if(isPriceCoin){
+                        double dollarValue = (double)json.get(key);
+                        valeur.setText(String.valueOf(Double.parseDouble(volumeCoin.getText())*dollarValue)+" $");
+                    }
+                    result.append(json.get(key) + " $ ");                }
                 if( key.equals("EUR") && showEuro.isSelected())
                     result.append(json.get(key) + " E ");
                 if( key.equals("BTC") && showBTC.isSelected())
