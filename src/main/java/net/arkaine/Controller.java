@@ -77,9 +77,11 @@ public class Controller implements Initializable {
         volumeCoin.textProperty().addListener(
               ( observable,  oldValue,
                                  newValue) -> {
-                if (!newValue.matches("\\d*")) {
-                    volumeCoin.setText(newValue.replaceAll("[^\\d]", ""));
+                if (!newValue.matches("[\\d.]*")) {
+                    volumeCoin.setText(newValue.replaceAll("[^\\d.]", ""));
                 }else{
+                    if(volumeCoin.getText().isEmpty())
+                        volumeCoin.setText("0");
                     valeur.setText(String.valueOf(Double.parseDouble(volumeCoin.getText())*dollarValue)+" $");
                 }
             });
@@ -111,11 +113,18 @@ public class Controller implements Initializable {
         System.out.println("Saving ...");
         try {
             String content =  ("listMonnaies=");
+            List<String>memToken = new ArrayList<>();
             for(String token: savedMoney.keySet()){
                 System.out.println("Save :" + token);
-                if(token != null && !token.trim().isEmpty() && activeCoins.contains(token))
-                    content += token+",";
+                if(token != null
+                        && !token.trim().isEmpty()
+                        && activeCoins.contains(token)
+                        && !memToken.contains(token)) {
+                    content += token + ",";
+                    memToken.add(token);
+                }
             }
+                System.out.println("Save ALL :" + content);
             Files.write(Paths.get("liste.properties"), content.getBytes(), StandardOpenOption.CREATE);
         }catch (IOException e) {
             e.printStackTrace();
@@ -146,6 +155,7 @@ public class Controller implements Initializable {
             });
             tab.setContent(browser);
             tabSelectedCoins.getTabs().add(tab);
+            System.out.println(money);
             savedMoney.put(money,tab);
             return tab;
         }
