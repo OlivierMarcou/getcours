@@ -7,14 +7,17 @@ import javafx.scene.control.Tab;
 public class TabAutoRefresh extends Tab{
 
     public TabAutoRefresh(String money, Controller parent){
-        super(money + " " + parent.addPrice(money));
+        super(money + " \n" + parent.addPrice(money));
+        setStyle(
+                "-fx-font-weight: bold;");
+
         Task<Integer> task = new Task<Integer>() {
             @Override
             protected Integer call() throws Exception {
                 int i;
                 while(true) {
                     try {
-                        Thread.sleep(1000);
+                        Thread.sleep(2000);
                     } catch (InterruptedException ie) {
                     }
 
@@ -23,7 +26,7 @@ public class TabAutoRefresh extends Tab{
 
                         @Override
                         public void run() {
-                            TabAutoRefresh.this.setText(money + " " + parent.addPrice(money));
+                            TabAutoRefresh.this.setText(money + " \n" + parent.addPrice(money));
                         }
                     });
 

@@ -44,7 +44,7 @@
            </children>
        </HBox>
        
-      <TabPane id="tabSelectedCoins" fx:id="tabSelectedCoins" minWidth="800.0" prefHeight="800.0" prefWidth="1024.0" tabClosingPolicy="UNAVAILABLE" GridPane.columnSpan="2" GridPane.hgrow="always" GridPane.rowIndex="4" GridPane.vgrow="always">
+      <TabPane id="tabSelectedCoins" fx:id="tabSelectedCoins" minWidth="800.0" prefHeight="800.0" prefWidth="1024.0" style="-fx-tab-max-width:150;-fx-tab-max-height:40;-fx-tab-min-width:150;-fx-tab-min-height:40;" tabClosingPolicy="UNAVAILABLE" GridPane.columnSpan="2" GridPane.hgrow="always" GridPane.rowIndex="4" GridPane.vgrow="always">
         <tabs>
         </tabs>
       </TabPane>
