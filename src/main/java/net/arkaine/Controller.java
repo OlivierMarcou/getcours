@@ -1,6 +1,5 @@
 package net.arkaine;
 
-import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.Event;
@@ -12,7 +11,6 @@ import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
-import javafx.stage.Stage;
 import org.json.simple.JSONObject;
 
 import java.io.IOException;
@@ -200,7 +198,8 @@ public class Controller implements Initializable {
                         dollarValue = (double)json.get(key);
                         valeur.setText(String.valueOf(Double.parseDouble(volumeCoin.getText())*dollarValue)+" $");
                     }
-                    result.append(json.get(key) + " $ ");                }
+                    result.append(json.get(key) + " $ ");
+                }
                 if( key.equals("EUR") && showEuro.isSelected())
                     result.append(json.get(key) + " E ");
                 if( key.equals("BTC") && showBTC.isSelected())

@@ -5,18 +5,14 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 import java.io.*;
 import java.net.URL;
 import java.net.URLConnection;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.Properties;
-
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 
 public class Main extends Application {
     private static String urlApiAllCoins ="https://min-api.cryptocompare.com/data/all/coinlist";
@@ -51,7 +47,7 @@ public class Main extends Application {
     }
 
     public static JSONObject getJson(String urlApi){
-        JSONParser parser = new JSONParser();
+        JSPCatcher parser = new JSPCatcher();
 
         try {
             URL url = new URL(urlApi); // URL to Parse
